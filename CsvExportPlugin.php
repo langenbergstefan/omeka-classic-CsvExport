@@ -12,6 +12,7 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
     protected $_filters = array(
         'response_contexts',
         'action_contexts',
+        'items_browse_per_page',
     );
 
     /**
@@ -109,7 +110,7 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
      * @param array $args
      * @return array
      */
-    public function filterActionContexts($contexts, $args) {
+     public function filterActionContexts($contexts, $args) {
         // Browse and show views for Items
         if ($args['controller'] instanceof ItemsController) {
             $contexts['browse'][] = 'csv';
@@ -120,6 +121,14 @@ class CsvExportPlugin extends Omeka_Plugin_AbstractPlugin
         }
         return $contexts;
     }
+
+    public function filterItemsBrowsePerPage($perPage, $args) {
+        if(isset($_GET['output']) && $_GET['output'] == 'csv') {
+            $perPage = null;
+        }
+        return $perPage;
+    }    
+  
 }
 
 // Plugin-wide setup
